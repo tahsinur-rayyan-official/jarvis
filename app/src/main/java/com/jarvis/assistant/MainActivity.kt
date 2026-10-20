@@ -167,6 +167,7 @@ class MainActivity : Activity(), TextToSpeech.OnInitListener {
         top.addView(title, LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f))
         langBtn = smallButton("বাংলা") { toggleLang() }
         top.addView(langBtn)
+        top.addView(smallButton("🔊") { openVoiceSettings() })
         top.addView(smallButton("⚙") { showSettings() })
         root.addView(top)
 
@@ -377,7 +378,22 @@ class MainActivity : Activity(), TextToSpeech.OnInitListener {
             }
             return
         }
+        // a slightly slower pace sounds more natural than the default
+        engine.setSpeechRate(0.92f)
+        engine.setPitch(1.0f)
         engine.speak(text, TextToSpeech.QUEUE_FLUSH, null, "jarvis")
+    }
+
+    private fun openVoiceSettings() {
+        try {
+            startActivity(Intent("com.android.settings.TTS_SETTINGS"))
+        } catch (e: Exception) {
+            try {
+                startActivity(Intent(android.provider.Settings.ACTION_SETTINGS))
+            } catch (e2: Exception) {
+                addMessage("ফোনের সেটিংস খুলতে পারলাম না। নিজে সেটিংস > ভাষা > টেক্সট-টু-স্পিচ এ যান।", false)
+            }
+        }
     }
 
     private fun respond(text: String) {
