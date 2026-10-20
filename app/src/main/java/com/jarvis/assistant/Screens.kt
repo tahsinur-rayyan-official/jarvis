@@ -397,7 +397,7 @@ fun VoiceSection(vm: JarvisViewModel) {
     var showVoices by remember { mutableStateOf(false) }
 
     Section("Voice") {
-        SwitchRow("Speak replies", "Jarvis talks back out loud.", vm.speakReplies) { vm.setSpeakReplies(it) }
+        SwitchRow("Speak replies", "Jarvis talks back out loud.", vm.speakReplies) { vm.changeSpeakReplies(it) }
         Text("Voice engine", color = C.textDim, fontSize = 12.sp)
         ChipRow(
             listOf(
@@ -513,7 +513,7 @@ fun AssistantSection(vm: JarvisViewModel) {
             singleLine = false, minLines = 3
         )
         SwitchRow("Hands-free conversation", "After Jarvis speaks, it listens again automatically.", vm.handsFree) {
-            vm.setHandsFree(it)
+            vm.changeHandsFree(it)
         }
         SwitchRow("Listen on launch", "Start listening as soon as the app opens.", autoListen) {
             autoListen = it

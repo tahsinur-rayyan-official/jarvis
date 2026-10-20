@@ -320,10 +320,10 @@ fun ControlsRow(vm: JarvisViewModel) {
         Pill("English", vm.sttLang == "en-US") { vm.setLang("en-US") }
         Pill("Bangla", vm.sttLang == "bn-BD") { vm.setLang("bn-BD") }
         Pill(if (vm.handsFree) "Hands-free on" else "Hands-free off", vm.handsFree) {
-            vm.setHandsFree(!vm.handsFree)
+            vm.changeHandsFree(!vm.handsFree)
         }
         Pill(if (vm.speakReplies) "Voice on" else "Voice off", vm.speakReplies) {
-            vm.setSpeakReplies(!vm.speakReplies)
+            vm.changeSpeakReplies(!vm.speakReplies)
         }
     }
 }

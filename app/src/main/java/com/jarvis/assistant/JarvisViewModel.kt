@@ -114,13 +114,13 @@ class JarvisViewModel(app: Application) : AndroidViewModel(app), SpeechInput.Lis
 
     // ------------------------------------------------------------------ settings hooks
 
-    fun setHandsFree(v: Boolean) {
+    fun changeHandsFree(v: Boolean) {
         handsFree = v
         store.handsFree = v
         silentTurns = 0
     }
 
-    fun setSpeakReplies(v: Boolean) {
+    fun changeSpeakReplies(v: Boolean) {
         speakReplies = v
         store.speakReplies = v
         if (!v) speaker.stop()
@@ -334,7 +334,7 @@ class JarvisViewModel(app: Application) : AndroidViewModel(app), SpeechInput.Lis
                     if (silentTurns < 3) {
                         startListening()
                     } else {
-                        setHandsFree(false)
+                        changeHandsFree(false)
                         addMsg(Kind.ACTION, "Hands-free paused. Tap the mic when you're ready.")
                     }
                 }
@@ -422,7 +422,7 @@ class JarvisViewModel(app: Application) : AndroidViewModel(app), SpeechInput.Lis
         if (any("stop listening", "goodbye", "good bye", "that's all", "that is all", "never mind") ||
             any("\u09AC\u09BF\u09A6\u09BE\u09AF\u09BC")
         ) {
-            setHandsFree(false)
+            changeHandsFree(false)
             return "Okay, I'll be here when you need me."
         }
         if (any("torch", "flashlight", "\u099F\u09B0\u09CD\u099A")) {
