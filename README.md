@@ -1,112 +1,53 @@
-# জার্ভিস (J.A.R.V.I.S) — অ্যান্ড্রয়েডের জন্য ফ্রি ভয়েস অ্যাসিস্ট্যান্ট
+# Jarvis 2.0
 
-আপনি বাংলা বা ইংরেজিতে কথা বলবেন, জার্ভিস বুঝে উত্তর দেবে ও জোরে বলে শোনাবে। কিছু কাজ সে সরাসরি ফোনে করে দেবে।
+A voice assistant for Android: modern Compose UI, natural-sounding voices, and an AI that
+can actually operate your phone through tool calling.
 
-## জার্ভিস যা যা পারে
+## What's new in 2.0
 
-| কাজ | বলার উদাহরণ |
-|---|---|
-| যেকোনো প্রশ্নের উত্তর (ফ্রি AI) | "বাংলাদেশের রাজধানী কী?" |
-| টর্চ জ্বালানো/নেভানো | "টর্চ জ্বালাও", "টর্চ বন্ধ করো" |
-| অ্যালার্ম সেট | "সকাল ৬:৩০ এ অ্যালার্ম দাও", "alarm 7 pm" |
-| অ্যাপ খোলা | "ইউটিউব খোলো", "open whatsapp" |
-| ডায়াল করা | "01712345678 নম্বরে কল করো" |
-| সময় ও তারিখ | "কয়টা বাজে?", "আজকের তারিখ কত?" |
-| কথা থামানো | "চুপ করো" |
+**Interface**
+- Fully English, rebuilt in Jetpack Compose with a dark theme and an animated voice orb that reacts to your voice
+- Chat with action pills ("Setting an alarm for 06:30"), selectable text, suggestion shortcuts
+- Notes, tasks and memory screen; full settings screen
+- Photo attach and camera: ask Jarvis about a picture
 
-## যা এখনো নেই
+**Voice**
+- Natural voices: Groq Orpheus (English) and Gemini TTS (English and Bangla), with automatic fallback to the phone's own voice
+- Sentence-by-sentence streaming playback, so speech starts quickly and has natural phrasing
+- Replies are written for the ear (contractions, spoken numbers, no markdown)
+- Live speech-to-text with partial results, English or Bangla
+- Hands-free conversation mode: Jarvis listens again after it speaks
+- Tap the mic while it talks to interrupt
 
-- "হেই জার্ভিস" বলে জাগানো (ওয়েক ওয়ার্ড)। এখন মাইক বাটনে চাপ দিতে হয়।
-- অন্য অ্যাপের ভেতরে গিয়ে কাজ করা (যেমন হোয়াটসঅ্যাপে মেসেজ লেখা)।
-- সরাসরি কল করা। ডায়ালার খোলে, কল বাটন আপনি চাপবেন।
+**Brain**
+- Tool calling instead of keyword matching, so you can say things naturally in any wording
+- Conversation history, long-term memory ("remember that I prefer tea"), custom instructions
+- Providers: Groq, OpenRouter, Gemini, or any OpenAI-compatible endpoint
 
-এগুলো পরে ধাপে ধাপে যোগ করা যাবে।
+**Phone actions (22 tools)**
+Alarms, timers, flashlight, open any app, call by contact name, SMS / WhatsApp / email drafts,
+find contacts, web / YouTube / music search, maps and navigation, media and volume control,
+battery / storage / network status, settings screens, calendar events, notes, tasks,
+weather, currency conversion, Wikipedia, calculator, clipboard and share, dice and coin.
 
----
+## Setup
 
-## ধাপ ১: একটা ফ্রি AI key নিন
+1. Push to GitHub. The Action builds `app-debug.apk` (Actions tab, artifact `jarvis-apk`).
+2. Install the APK and open Settings in the app.
+3. Add a key. Free options: Groq (console.groq.com/keys) or Gemini (aistudio.google.com/apikey).
+4. For the natural English voice: accept the terms for the Orpheus model once at
+   console.groq.com/playground?model=canopylabs/orpheus-v1-english
+5. For natural Bangla: add a Gemini key. Gemini's free voice quota is small, so Jarvis falls back to the phone's voice when it runs out.
 
-অ্যাপ তিনটা ফ্রি সেবার যেকোনোটা দিয়ে চলে। **প্রথমে Groq চেষ্টা করুন**, না হলে OpenRouter।
+## Local build on Fedora
 
-**Groq (প্রস্তাবিত, কার্ড লাগে না):**
-1. ব্রাউজারে https://console.groq.com/keys খুলুন।
-2. গুগল বা গিটহাব দিয়ে লগইন করুন।
-3. **Create API Key** চাপুন, নাম যা খুশি দিন।
-4. যে লম্বা key দেখাবে সেটা কপি করে রাখুন (পরে আর দেখা যায় না)।
-
-**OpenRouter (বিকল্প, কার্ড লাগে না):**
-1. https://openrouter.ai/keys খুলে লগইন করুন।
-2. **Create Key** চাপুন এবং key কপি করুন।
-3. শুধু যে মডেলের নামের শেষে `:free` আছে সেগুলো ফ্রি।
-
-**Gemini (যদি কখনো পান):** https://aistudio.google.com/apikey
-
-**key কাউকে দেবেন না।**
-
-## ধাপ ২: Fedora তে প্রয়োজনীয় টুল ইনস্টল
-
-টার্মিনাল খুলে চালান:
-
-```bash
-sudo dnf install -y git gh
+```
+sudo dnf install android-tools
+./gradlew installDebug      # phone connected with USB debugging
+adb logcat | grep -i jarvis
 ```
 
-## ধাপ ৩: GitHub অ্যাকাউন্ট ও লগইন
+## Privacy
 
-1. https://github.com এ গিয়ে ফ্রি অ্যাকাউন্ট খুলুন।
-2. টার্মিনালে চালান:
-
-```bash
-gh auth login
-```
-
-প্রশ্নগুলোতে বেছে নিন: **GitHub.com** → **HTTPS** → **Login with a web browser**। স্ক্রিনে একটা কোড দেখাবে, সেটা ব্রাউজারে বসিয়ে অনুমতি দিন।
-
-3. Git এ নিজের নাম ও ইমেইল দিন (একবারই লাগবে):
-
-```bash
-git config --global user.name "আপনার নাম"
-git config --global user.email "আপনার-gmail@gmail.com"
-```
-
-## ধাপ ৪: কোড GitHub এ পাঠান
-
-এই `jarvis` ফোল্ডারের ভেতরে টার্মিনাল খুলে চালান:
-
-```bash
-git init
-git add .
-git commit -m "Jarvis first version"
-git branch -M main
-gh repo create jarvis --public --source=. --push
-```
-
-## ধাপ ৫: GitHub নিজেই APK বানিয়ে দেবে
-
-1. ব্রাউজারে আপনার রিপোজিটরি খুলুন (`https://github.com/আপনার-ইউজারনেম/jarvis`)।
-2. উপরের **Actions** ট্যাবে যান।
-3. **Build APK** নামের কাজটা চলবে। সবুজ টিক চিহ্ন আসা পর্যন্ত অপেক্ষা করুন (৫–১০ মিনিট লাগতে পারে)।
-4. কাজটার ওপর ক্লিক করুন, একদম নিচে **Artifacts** এর নিচে **jarvis-apk** পাবেন। সেটা ডাউনলোড করুন (ZIP ফাইল)।
-5. ZIP খুললে ভেতরে `app-debug.apk` পাবেন।
-
-যদি লাল ক্রস চিহ্ন আসে, ওই কাজের লগ কপি করে আমাকে পাঠান, আমি ঠিক করে দেব।
-
-## ধাপ ৬: ফোনে ইনস্টল
-
-1. `app-debug.apk` ফাইলটা ফোনে পাঠান (USB কেবল, Bluetooth বা Google Drive দিয়ে)।
-2. ফোনে ফাইলটা ট্যাপ করুন। "অজানা অ্যাপ ইনস্টল" এর অনুমতি চাইলে অনুমতি দিন।
-3. Play Protect সতর্কবার্তা দিলে **Install anyway** চাপুন (কারণ অ্যাপটা আপনি নিজে বানিয়েছেন, Play Store এ নেই)।
-
-## ধাপ ৭: প্রথমবার চালানো
-
-1. অ্যাপ খুললে সেটিংস বক্স আসবে। উপরের তালিকা থেকে সেবা বেছে নিন (যেমন **Groq**), ধাপ ১ এর key বসিয়ে **সংরক্ষণ** চাপুন। মডেলের নাম আর Base URL নিজে থেকেই বসে যাবে।
-2. 🎤 বাটনে চাপ দিয়ে কথা বলুন। উপরের ডানদিকের বাটনে চাপ দিয়ে বাংলা/English বদলাতে পারবেন।
-3. জার্ভিসের কথা বাংলায় শুনতে ফোনে Google এর বাংলা টেক্সট-টু-স্পিচ ভয়েস থাকতে হবে। না থাকলে অ্যাপ জানিয়ে দেবে। ফোনের সেটিংস > ভাষা > টেক্সট-টু-স্পিচ থেকে ডাউনলোড করা যায়।
-4. পরে অন্য সেবায় যেতে চাইলে ⚙ চেপে সেবা বদলে সেই সেবার key দিন। আগের key মনে থাকবে।
-
-## সমস্যা হলে
-
-- **"মডেলের নাম বা Base URL ঠিক নেই"**: ফ্রি সেবাগুলো মাঝে মাঝে মডেলের নাম বদলায়। ⚙ সেটিংসে মডেলের নাম বদলে সেবার ওয়েবসাইটের মডেল তালিকা থেকে একটা নাম দিন। অ্যাপ নিজেও আরও কয়েকটা নাম চেষ্টা করে।
-- **"ফ্রি লিমিট শেষ"**: কিছুক্ষণ পর আবার বলুন, অথবা ⚙ থেকে অন্য সেবা বেছে নিন। ফ্রি সংস্করণে প্রতি মিনিট ও প্রতিদিনের সীমা থাকে।
-- **"API key ঠিক নেই"**: key আবার কপি করে বসান, শুরুতে বা শেষে ফাঁকা জায়গা যেন না থাকে।
-- **ভয়েস টাইপিং খোলে না**: ফোনে Google অ্যাপ আপডেট করুন।
+Your messages and tool results (for example contact names you ask about) go to the AI provider you choose.
+API keys are stored on the phone in app-private storage.
